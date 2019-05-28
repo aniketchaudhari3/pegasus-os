@@ -7,9 +7,9 @@ A web based operating system written in JavaScript!
 - _Mac_
 - _Linux_
 
-### Pure JavaScript
+### Pure Vanilla JavaScript
 
-Only JavaScript,no other JavaScript libraries used.
+Only Vanilla JavaScript,no other JavaScript libraries or frameworks used.
 
 
 
