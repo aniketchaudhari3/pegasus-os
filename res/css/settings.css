@@ -1,0 +1,59 @@
+/*
+Settings 
+settings.css
+Pegasus v2.0
+by Aniket Chaudhari
+*/
+.imagesetter img#profilePic{
+	height:80px;
+	width:80px;
+	border:2px dashed black;
+	border-radius:50%;
+	outline:none;
+}
+#lockPic{
+	height:100%;
+	width:100%;
+	outline:none;
+}
+.imagesetter .uploadProfilePic{
+	height:4vh;
+	width:25vh;
+	border-radius:0.5vh;
+	background:dodgerblue;
+	color:white;
+	padding: 4px;
+	font-size:2vh;
+	margin-top:3%;
+	box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2),0 5px 7px 0 rgba(0,0,0,0.22) !important;
+	transition:box-shadow 0.35s;
+}
+.imagesetter .uploadProfilePic:hover{
+	box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2),0 20px 33px 0 rgba(0,0,0,0.22) !important;
+	
+}
+#profileUploader,#bgUploader,#fileUploader,#fileOpener{
+	display:none;
+}
+.dataBlock{
+	height:4vh;
+	width:25vh;
+	border-radius:0.5vh;
+	background:dodgerblue;
+	color:white;
+	padding: 4px;
+	font-size:2vh;
+	margin-top:3%;
+	box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2),0 5px 7px 0 rgba(0,0,0,0.22) !important;
+	transition:box-shadow 0.35s;
+}
+.dataBlock:hover{
+	box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2),0 20px 33px 0 rgba(0,0,0,0.22) !important;
+	
+}
+#previewer{
+	height:45%;
+	width:60%;
+	margin-top:3%;
+	border:1px dashed black;
+}

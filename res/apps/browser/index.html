@@ -1,0 +1,162 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+		<link rel="stylesheet" href="css/font-awesome.css"/>
+        <link rel="stylesheet" href="css/font-awesome.min.css"/>
+		<style>
+			#toolbar{
+				position:fixed;
+				top:0;
+				left:0;
+				right:0;
+				background:#F2F2F2;
+				height:4vh;
+				width:100%;
+				padding:4px;
+			}
+			#toolbar .tool{
+				border-radius:0.5vh;
+				float:left;
+				text-align:center;
+				color:5A5A5A;
+				vertical-align:middle;
+				font-size:2.5vh;
+				padding:5px;
+				margin-left:1vh;
+				transition:background 0.45s,color 0.45s;
+			}
+			#toolbar .tool:hover{
+				background:#DFDFDF;
+				color:black;
+			}
+			#toolbar .tool:active{
+				background:#DFDFDF;
+				color:black;
+				border-radius:50%;
+			}
+			#search #searchBox{
+				height:85%;
+				vertical-align:middle;
+				width:70%;	
+				border:1px solid #A9A9A9;
+				outline:none;
+				border-radius:0.5vh;
+				margin-left:1vh;
+				margin-top:0.4vh;
+				padding-left:5px;
+				font:caption;
+				font-size:1.5vh;
+			}
+			iframe#browser{
+				border:none;
+				position:fixed;
+				left:0;
+				bottom:0;
+				right:0;
+				outline:none;
+				width:100%;
+				height:95vh;
+				}
+				
+		</style>
+		<script>
+		window.onload = function(){
+			$('#searchBox').focus();
+			$('#browser').src = 'homepage.html';
+		}
+		window.onkeydown = function(e){
+			if(e.ctrlKey && e.keyCode==82){
+				search();
+				e.preventDefault();
+				
+			}
+		}
+		var history;
+			  function $(e){
+			return document.querySelector(e);
+		  }
+		  
+		  
+		  function avl_search(){
+	$('#searchBox').addEventListener('keypress',function(e){
+		if(e.keyCode==13){
+				search();
+				e.preventDefault();
+				}
+	});
+	
+}
+function search(){
+				
+				var keywords = $('#searchBox').value;
+				var re = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
+				var protocol = /http:///;
+				
+				if(keywords=="" || keywords===undefined){
+					
+				}
+				else{
+				//if it is a url
+				if (re.test(keywords)){
+					var protocol = /http:///;
+					var protocolS = /https:///;
+					if(protocol.test(keywords) || protocolS.test(keywords)){
+					$('#browser').src = keywords;
+					$('#searchBox').value = $('#browser').src;
+					}
+					else{
+					$('#browser').src = 'http://'+keywords;
+					$('#searchBox').value = $('#browser').src;
+					}
+					
+					
+				
+				}
+				//if it is not a url
+				else{
+				$('#browser').src = 'https://www.bing.com/search?q='+keywords;
+				$('#searchBox').value = $('#browser').src;
+				
+				}
+				}
+				$('#searchBox').blur();
+}
+function home(){
+$('#browser').src = 'homepage.html';
+$('#searchBox').value = '';
+$('#searchBox').focus();
+}
+		</script>
+	</head>
+	<body>	
+	<div id="toolbar">
+		<div onclick="history.go(-1)" class="tool">
+			<i class="fa fa-chevron-left"></i>
+		</div>
+		<div onclick="history.go(1)" class="tool">
+			<i class="fa fa-chevron-right"></i>
+		</div>
+		<div onclick="search()" class="tool">
+			<i class="fa fa-repeat"></i>
+		</div>
+		<div onclick="window.stop()" class="tool">
+			<i class="fa fa-times"></i>
+		</div>
+		<div onclick="home()" class="tool">
+			<i class="fa fa-home"></i>
+		</div>
+		<div onclick="search()" class="tool">
+			<i class="fa fa-search"></i>
+		</div>
+		<div onclick="" id="search">
+			<input onclick="this.select()" onfocus="avl_search()" type="search" id="searchBox"/>
+	
+		</div>
+		
+	</div>
+	
+	<iframe id="browser">
+	
+	</iframe>
+	</body>
+</html>

@@ -1,0 +1,799 @@
+/*
+soul.css
+Pegasus v2.0
+by Aniket Chaudhari
+*/
+html{
+	overflow:hidden;
+}
+*{
+	box-sizing:border-box;
+}
+
+@font-face{
+	font-family:roboto thin;
+	src:url(res/css/roboto thin.ttf);
+}
+body {
+	background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+	cursor:default;
+	font-family:roboto thin;
+	
+}
+.button{
+	height:4vh;
+	width:25vh;
+	border-radius:0.5vh;
+	background:dodgerblue;
+	color:white;
+	padding: 4px;
+	font-size:2vh;
+	margin-top:3%;
+	box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2),0 5px 7px 0 rgba(0,0,0,0.22) !important;
+	transition:box-shadow 0.35s;
+}
+.button:hover{
+	box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2),0 20px 33px 0 rgba(0,0,0,0.22) !important;
+	
+}
+select{
+	font:menu;
+}
+select#animSelector{
+	width:25vh;
+	height:4vh;
+	border-radius:0.5vh;
+	background:black;
+	color:white;
+	padding: 4px;
+	font-size:2vh;
+	margin-top:3%;
+	border:none;
+	outline:none;
+	text-align:left;
+	padding-left:8px;
+	box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2),0 5px 7px 0 rgba(0,0,0,0.22) !important;
+	transition:box-shadow 0.35s;
+}
+select#animSelector:hover{
+	box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2),0 20px 33px 0 rgba(0,0,0,0.22) !important;
+	
+}
+/*
+the top panel containing timeholder & fullScreen btn 
+
+*/
+#topPanel {
+    height: 3.75%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #43cea2;
+	background: -webkit-linear-gradient(to left, #43cea2 , #185a9d);
+	background: linear-gradient(to left, #43cea2 , #185a9d); 
+    color: white;
+    overflow: hidden;
+   
+	animation:topbar 1s 1;
+}
+
+
+
+#timeHolder {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+#fullScreen {
+    text-align: right;
+    float: right;
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 0.5%;
+}
+#netChecker {
+    top: 0.5%;
+    margin: 0.5%;
+	z-index:1;
+}
+#fullScreen:hover{
+    color: dodgerblue;
+	
+}
+/*
+Lockscreen
+*/
+#lockScreen{
+	height:100%;
+	width:100%;
+	display:inline;
+	
+}
+#lockScreen #lockScreenTime{
+	color:white;
+}
+#lockScreen #lockScreenTime #time{
+	font-size:15vh;
+}
+#lockScreen #lockScreenTime #dateBar{
+	font-size:3vh;
+}
+#lockScreen #login{
+	height:40vh;
+	width:30vh;
+	margin-top:10%;
+	
+}
+#lockScreen #username{
+	color:white;
+	margin-top:0.5%;
+	margin-bottom:0.5%;
+}
+#lockScreen #login #loginImg{
+	border:2px solid black;
+	border-radius:50%;
+	margin-top:15%;
+	height:15vh;
+	width:15vh;
+	padding:10%;
+	background:white;
+}
+#lockScreen #login #osPass{
+	outline:none;
+	font-family:segoe ui light;
+	background:black;
+	border:none;
+	border-top:2px solid dodgerblue;
+	border-bottom:2px solid dodgerblue;
+	color:white;
+	height:4vh;
+	width:80%;
+	margin-top:10%;
+	font-size:2.5vh;
+	padding-left:5%;
+	text-align:left;
+}
+#lockScreen #login #osPass:[placeholder]{
+	color:black;
+}
+/*
+desktop
+*/
+#desktop{
+	height:92.25%;
+	width:100%;
+	margin-top:3.75%;
+}
+
+/*
+taskbar
+*/
+#taskbar{
+	height:4%;
+	width:100%;
+	position:fixed;
+	bottom:0;
+	color:white;
+	font-size:3vh;
+	padding:0.5vh;
+	background: #2c3e50; 
+    background: -webkit-linear-gradient(to left, #2c3e50 , #3498db);
+    background: linear-gradient(to left, #2c3e50 , #3498db); 
+	animation:taskbar 1s 1;
+	left:0;
+	right:0;
+	overflow:hidden;
+}
+#taskbar #home{
+	height:2%;
+	width:2%;
+	transition:color 0.45s;
+	float:left;
+	position:fixed;
+	left:0;
+	display:inline;
+}
+#taskbar #search{
+	height:2%;
+	width:2%;
+	transition:color 0.45s;
+	float:right;
+	position:fixed;
+	right:10;
+	bottom:12;
+	display:inline;
+}
+#taskbar #runningApps{
+	height:100%;
+	width:92%;
+	
+	
+}
+#taskbar #home:hover,#taskbar #search:hover{
+	color:#185a9d;
+}
+
+/*
+AppsDrawer
+*/
+#controls{
+	height:5%;
+	width:100%;
+	background: #7b4397; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to left, #7b4397 , #dc2430); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to left, #7b4397 , #dc2430); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	overflow:hidden;				
+}
+#controls #lockOS{
+	float:left;
+	padding:0.5%;
+	transition:color 0.45s;
+}
+#controls #lockOS:hover{
+	color:white;
+}
+#controls #cut{
+	float:right;
+	height:100%;
+	color:white;
+	font-size:3vh;
+	transition:color 0.45s;
+	font-weight:lighter;
+	padding:0.5%;
+}
+#controls #cut:hover{
+	color:black;
+}
+#controls #appName{
+	float:left;
+	height:100%;
+	width:90%;
+	font-size:3vh;
+	color:white;
+	text-align:center;
+	font-weight:bold;
+}
+#appsDrawer{
+	display:none;
+	height:80vh;
+	width:75vw;
+	background:white;
+	margin-top:5%;
+	border-radius:0.5vh;
+	box-shadow: 0 12px 12px 0 rgba(0,0,0,0.2),0 40px 77px 0 rgba(0,0,0,0.22) !important;
+	font-size:3vh;
+	overflow-x:hidden;
+	
+}
+#appsDrawer #appsHolder{
+	height:95%;
+	width:100%;
+	background:#f3ebeb;
+	overflow-y:auto;
+}
+		#appsDrawer #app{
+			height:15vh;
+			width:11vh;
+			background:white;
+			border-radius:0.5vh;
+			float:left;
+			margin:4%;
+			font-family:segoe ui light;
+			text-align:center;
+			box-shadow: 0 12px 12px 0 rgba(0,0,0,0.2),0 40px 77px 0 rgba(0,0,0,0.22) !important;
+			transition:box-shadow 0.35s;
+			overflow:hidden;
+			white-space:nowrap;
+			text-overflow:ellipsis;
+			}
+		#appsDrawer	#app:hover{
+			box-shadow: 0 18px 18px 0 rgba(0,0,0,0.2),0 40px 77px 0 rgba(0,0,0,0.22) !important;
+			border-top:3px solid dodgerblue;
+			}
+		
+		#appsDrawer	#app #icon{
+			margin-top:5%;
+			margin-left:6%;
+			margin-right:5%;
+			height:62%;
+			width:88%;
+			border-radius:0.5vh;
+			box-shadow: 0 2px 2px 0 rgba(0,0,0,0.2),0  0 rgba(0,0,0,0.22) !important;
+	
+			}
+		#appsDrawer	#app #aname{
+			font-size:2vh;
+			margin-left:5%;
+			margin-right:5%;
+			margin-top:10%;
+			width:89%;
+			border-radius:0.5vh;
+			text-overflow:ellipsis;
+			}
+
+/*
+Calculator App
+*/
+#calculatorApp{
+display:none;
+margin-top:10%;
+height:74vh;
+border-radius:10px;
+width:45vh;
+background:royalblue;
+overflow:hidden;
+}
+#calculatorApp input[type=search]{
+height:6vh;
+width:35vh;
+border:none;
+margin-top:10%;
+margin-left:2%;
+padding-left:10px;
+border-radius:10px;
+font-size:5vh;
+font-family:segoe ui light;
+}
+#calculatorApp #operation{
+height:13vh;
+width:35vh;
+border-radius:10px;
+background:white;
+margin-top:5%;
+}
+#calculatorApp #operation input[type=button]{
+height:4vh;
+width:8vh;
+margin:2.5%;
+border-radius:8px;
+border:none;
+background:dodgerblue;
+color:white;
+font-size:4vh;
+box-shadow: 0 5px lightgrey;
+}
+#calculatorApp #operation input[type=button]:active{
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+#calculatorApp #numpad{
+height:30vh;
+width:35vh;
+border-radius:10px;
+background:white;
+margin-top:5%;
+}
+#calculatorApp #numpad input[type=button]{
+height:5vh;
+width:8vh;
+margin:3%;
+border-radius:8px;
+border:none;
+background:dodgerblue;
+color:white;
+font-size:4vh;
+box-shadow: 0 5px lightgrey;
+}
+#calculatorApp #numpad input[type=button]:active{
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+#calculatorApp #equal input[type=button]{
+height:7vh;
+width:35vh;
+border-radius:10px;
+background:white;
+margin-top:5%;
+border:none;
+background:white;
+color:dodgerblue;
+font-size:4vh;
+box-shadow: 0 5px lightgrey;
+}
+#calculatorApp #equal input[type=button]:active{
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+/*
+end CalculatorApp
+*/
+/*
+	contextmenu styles
+*/
+#contextmenu{
+			display:none;
+			height:14%;
+			width:10%;
+			background:rgba(0,0,0,0.6);
+			font-size:2vh;
+			font-weight:bold;
+			overflow:hidden;
+			border-radius:0.5vh;
+			border:.5px solid white;
+			}
+			#contextmenu .citem{
+				height:33.3333333%;
+				width:100%;
+				color:white;
+				padding-left:10%;
+				padding-top:7%;
+				}
+			#contextmenu .citem:hover{
+				background:#fff;
+				color:black;
+			}
+.container{
+height:95%;
+width:100%;
+clear:both;
+}
+
+#settingsWindow{
+	display:none;
+	height:80vh;
+	width:75vw;
+	background:white;
+	margin-top:5%;
+	border-radius:0.5vh;
+	box-shadow: 0 12px 12px 0 rgba(0,0,0,0.2),0 40px 77px 0 rgba(0,0,0,0.22) !important;
+	font-size:3vh;
+	overflow-x:hidden;
+	
+}
+#settingsWindow .container .tabholder{
+	height:100%;
+	width:30%;
+	float:left;
+	background:royalblue;
+}
+#settingsWindow .container .panelholder{
+	height:100%;
+	width:70%;
+	float:right;
+	background:#ffffff;
+	overflow:hidden;
+}
+
+.tabItem{
+	height:6vh;
+	width:100%;
+	color:white;
+	background:dodgerblue;
+	text-align:left;
+	padding-left:7%;
+	padding-top:3%;
+	font-size:2.5vh;
+}
+.tabItem .fa{
+	padding-right:3%;
+}
+.tabItem:hover{
+	color:black;
+	background:white;
+}
+.tabItem:active{
+	color:white;
+	background:black;
+}
+#accountPanel,#bgPanel,#timePanel,#personifyPanel,#aboutPanel{
+	height:100%;
+	width:100%;
+	display:none;
+}
+#videoPlayer{
+	display:none;
+	height:80vh;
+	width:90vw;
+	background:rgba(0,0,0,0.3);
+	margin-top:5%;
+	border-radius:0.5vh;
+	box-shadow: 0 12px 12px 0 rgba(0,0,0,0.2),0 40px 77px 0 rgba(0,0,0,0.22) !important;
+	font-size:3vh;
+	overflow:hidden;
+}
+#musicPlayer{
+	display:none;
+	height:60vh;
+	width:45vw;
+	background:rgba(0,0,0,0.3);
+	margin-top:5%;
+	border-radius:0.5vh;
+	box-shadow: 0 12px 12px 0 rgba(0,0,0,0.2),0 40px 77px 0 rgba(0,0,0,0.22) !important;
+	font-size:3vh;
+	overflow:hidden;
+}
+.txtfield{
+	outline:none;
+	font-family:segoe ui light;
+	background:black;
+	border:none;
+	border-top:2px solid dodgerblue;
+	border-bottom:2px solid dodgerblue;
+	color:white;
+	height:4vh;
+	width:80%;
+	font-size:2.5vh;
+	padding-left:5%;
+	text-align:left;
+}
+#vidController{
+	height:5%;
+	width:100%;
+	background:black;
+}
+#vidPlayer{
+	height:94%;
+	width:100%;
+	
+}
+
+
+.vidItems{
+	height:100%;
+	width:5vh;
+	color:white;
+	float:left;
+	font-size:2vh;
+	border-radius:0.5vh;
+	background:dodgerblue;
+	transition:background 0.45s,border-radius 0.45s,color 0.45s;
+}
+.vidItems:hover{
+	border-radius:0%;
+	color:white;
+	background:royalblue;
+}
+#vidCollection{
+	height:80%;
+	width:100%;
+	display:none;
+}
+#vidInfo{
+	height:100%;
+	width:25vh;
+	color:white;
+	float:left;
+	font-size:2vh;
+	margin-left:3%;
+}
+
+#musicPlayer{
+	display:none;
+	height:60vh;
+	width:45vw;
+	background:rgba(0,0,0,0.3);
+	margin-top:5%;
+	border-radius:0.5vh;
+	box-shadow: 0 12px 12px 0 rgba(0,0,0,0.2),0 40px 77px 0 rgba(0,0,0,0.22) !important;
+	font-size:3vh;
+	overflow:hidden;
+}
+#musicPlayer #controls{
+	height:6.5%;
+}
+#audController{
+	height:5%;
+	width:100%;
+	background:black;
+}
+#musicIcon{
+	height:80%;
+	width:100%;
+	color:white;
+	font-size:30vh;
+}
+#audPlayer{
+	height:10%;
+	background:white;
+	width:100%;
+	bottom:0;
+	}
+
+
+.audItems{
+	height:100%;
+	width:5vh;
+	color:white;
+	float:left;
+	font-size:2vh;
+	border-radius:0.5vh;
+	background:dodgerblue;
+	transition:background 0.45s,border-radius 0.45s,color 0.45s;
+}
+.audItems:hover{
+	border-radius:0%;
+	color:white;
+	background:royalblue;
+}
+#audCollection{
+	height:80%;
+	width:100%;
+	display:none;
+}
+#audInfo{
+	height:100%;
+	width:25vh;
+	color:white;
+	float:left;
+	font-size:2vh;
+	margin-left:3%;
+}
+#terminal{
+	display:none;
+	height:80vh;
+	width:90vw;
+	background:black;
+	margin-top:5%;
+	border-radius:0.5vh;
+	box-shadow: 0 12px 12px 0 rgba(0,0,0,0.2),0 40px 77px 0 rgba(0,0,0,0.22) !important;
+	font-size:3vh;
+	overflow-x:hidden;
+	
+	}
+#terminalOutput{
+	height:87%;
+	width:100%;
+	color:#52cc29;
+	font-family:consolas;
+	text-align:left;
+	padding:2%;
+	overflow-y:auto;
+	overflow-x:hidden;
+	word-wrap:wrap;
+}
+#terminalOutput b{
+color:white;
+}
+.commander{
+	height:8%;
+	width:100%;
+	border-top:2px solid #52cc29;
+	color:#52cc29;
+	font-family:consolas;
+}
+.commander .terminalGT{
+	height:100%;
+	width:5%;
+	background:black;
+	text-align:right;
+	font-size:4vh;
+}
+.commander #terminalInput{
+	height:100%;
+	width:95%;
+	float:right;
+	border:none;
+	background:black;
+	text-align:left;
+	font-size:3vh;
+	font-family:consolas;
+	padding-left:1%;
+	outline:none;
+	color:#52cc29;
+}
+/*
+notepad
+*/
+#notepadWindow{
+	display:none;
+	height:85vh;
+	width:90vw;
+	background:white;
+	margin-top:5%;
+	border-radius:0.5vh;
+	box-shadow: 0 12px 12px 0 rgba(0,0,0,0.2),0 40px 77px 0 rgba(0,0,0,0.22) !important;
+	font-size:3vh;
+	overflow:hidden;
+}
+#notepadWindow .controllers{
+	height:4vh;
+	width:100%;
+	background: linear-gradient(to left, #fe8c00 , #f83600); 
+    color:white;
+	float:left;
+}
+.noteOpt{
+	height:100%;
+	float:left;
+	transition:background 0.45s;
+	padding:5px;
+	font-size:2vh;
+}
+.noteOpt:hover{
+	border-radius:0.5vh;
+	background:dodgerblue;
+	
+}
+#fileMenu,#fontMenu{
+	height:98%;
+	font-size:2vh;
+	border:none;
+	outline:none;
+	border-radius:0.5vh;
+	background:black;
+	color:white;
+}
+.writer textarea#notepad{
+	height:100%;
+	width:100%;
+	outline:none;
+	border:none;
+	max-height:95%;
+	max-width:100%;
+	font-family:comic sans ms;
+	overflow:auto;
+}
+#noteinfo{
+	border-left:1px solid black;
+	margin-left:3%;
+}
+.modifier:hover{
+	background:white;
+	color:black;
+	border-radius:50%;
+}
+#fontSizeOut{
+	border-radius:0.5vh;
+	width:2%;
+}
+#fileUploadSection{
+	height:100%;
+	width:100%;
+}
+.infoCard{
+	margin-top:3%;
+	height:65%;
+	width:65%;
+	background:#bb0000;
+	color:white;
+	border-radius:0.5vh;
+}
+#socialIcons{
+letter-spacing:0.5vh;
+}
+.n:hover{
+color:white;
+	}
+	#clockApp{
+	display:none;
+	height:80vh;
+	width:70vw;
+	background:white;
+	margin-top:5%;
+	border-radius:0.5vh;
+	box-shadow: 0 12px 12px 0 rgba(0,0,0,0.2),0 40px 77px 0 rgba(0,0,0,0.22) !important;
+	font-size:3vh;
+	overflow:hidden;
+	}
+	#tabs{
+		height:5vh;
+		width:100%;
+		background:black;
+		color:white;
+	}
+	#tabs .tab{
+		float:left;
+		height:100%;
+		width:33%;
+		border-radius:50px;
+		transition:background 0.45s,color 0.45s;
+	}
+	#tabs .tab:hover{
+		background:dodgerblue;
+		color:white;
+		
+	}
+	#stopwatch,#alarm,#timer{
+		display:none;
+	}

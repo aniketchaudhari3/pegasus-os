@@ -1,0 +1,488 @@
+<html id="os" onunload="confExit()" onclick="cut(contextmenu)" oncontextmenu="comenu(event);return false">
+    <head id="head">
+        <title>Pegasus v2.0</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<meta charset="utf-8"/>
+        <link type="image/png" href="res/assets/favicon.png" rel="icon">
+        <link rel="stylesheet" href="res/css/fa_fonts/css/font-awesome.css"/>
+        <link rel="stylesheet" href="res/css/fa_fonts/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="res/css/soul.css"/>
+
+		<link rel="stylesheet" id="animSetter"/>
+
+        <link rel="stylesheet" href="res/css/window_themes.css"/>
+        <link rel="stylesheet" href="res/css/settings.css"/>
+   
+        <script src="res/js/backbone.js"></script>
+      	<script src="res/js/misc.js"></script>
+         <script data-dir="res/js/" id="main_script" src="res/js/require.js"></script>
+        <script src="res/js/backbone.js"></script>
+        <script src="res/js/time_handler.js"></script>
+        <script src="res/js/misc.js"></script>
+        <script src="res/js/window_manager.js"></script>
+        <script src="res/js/app_manager.js"></script>
+        <script src="res/js/terminal.js"></script>
+        <script src="res/js/notepad.js"></script>
+        <script src="res/js/search.js"></script>
+    
+        
+		  
+    </head>
+    <body >
+        <div id="topPanel">
+            <div id="timeHolder"></div>
+            <div title="Full Screen" onclick="launchFullscreen(document.documentElement)" id="fullScreen">
+                <i class="fa fa-arrows-alt"></i>
+            </div>
+			<div  id="netChecker">
+            
+            </div>
+        </div>
+        <center>
+	<div id="lockScreen">
+			<div id="lockScreenTime">
+				<div id="time"></div>
+			<div id="dateBar"></div>
+				</div>
+			<div id="login">
+				<div id="loginImg">
+					<i class="fa fa-4x fa-user"></i>
+				</div>
+				<h1 id="username"></h1>
+				<input onfocus="avl_pass()" autofocus id="osPass" placeholder="Enter Password" type="password"/>
+			</div>
+	</div>
+		
+            <div id="desktop">
+			<div id="contextmenu">
+				<div onclick="refreshOS()" class="citem">Refresh</div>
+				<div onclick="display(settingsWindow)" class="citem">Settings</div>
+				<div onclick="display(notepadWindow)" class="citem">New-Note</div>  
+			</div>
+			
+						<div  id="appsDrawer">
+							<div id="controls">
+							<div onclick="location.reload()" id="lockOS">
+								<i class="fa fa-lock"></i>
+							</div>
+								<div id="appName">
+									<i class="fa fa-bars"></i> 
+									Apps
+								</div>
+								<div onclick="hide(appsDrawer)" id="cut">
+								<i class="fa fa-times-circle"></i> 
+								</div>
+							</div>
+							<div id="appsHolder">
+									<div onclick="hide(appsDrawer);launchApp('Browser','res/apps/browser/index.html')" id="app">
+										<img src="res/assets/icons/Browser.jpg" id="icon"></img>
+										<p id="aname">Browser</p>
+									</div>
+									<div onclick="hide(appsDrawer);display(calculatorApp)" id="app">
+										<img src="res/assets/icons/Calculator.png" id="icon"></img>
+										<p id="aname">Calculator</p>
+									</div>
+									<div onclick="launchApp('Calendar','res/apps/calendar.html')" id="app">
+										<img src="res/assets/icons/Calendar.png" id="icon"></img>
+										<p id="aname">Calendar</p>
+									</div>
+									<div onclick="hide(appsDrawer);show(clockApp)" id="app">
+										<img src="res/assets/icons/Clock.png" id="icon"></img>
+										<p id="aname">Clock</p>
+									</div>
+									<div onclick="launchApp('Asteroid Attack','res/apps/games/asteroid_attack.html')" id="app">
+										<img src="res/assets/icons/Asteroid.png" id="icon"></img>
+										<p id="aname">Asteroid Attack</p>
+									</div>
+									<div onclick="launchApp('Clumsy Bird','res/apps/games/clumsy_bird/index.html')" id="app">
+										<img src="res/assets/icons/Clumsy_Bird.png" id="icon"></img>
+										<p id="aname">Clumsy Bird</p>
+									</div>
+									<div onclick="launchApp('Slime Slaughter','res/apps/games/slime_slaughter.html')" id="app">
+										<img src="res/assets/icons/Slime.png" id="icon"></img>
+										<p id="aname">Slime Slaughter</p>
+									</div>
+									<div onclick="launchApp('Doodle','res/apps/doodle.html')" id="app">
+										<img src="res/assets/icons/Doodle.png" id="icon"></img>
+										<p id="aname">Doodle</p>
+									</div>
+									<div onclick="hide(appsDrawer);display(videoPlayer)" id="app">
+										<img src="res/assets/icons/Video.png" id="icon"></img>
+										<p id="aname">Video</p>
+									</div>
+									<div onclick="hide(appsDrawer);display(musicPlayer)" id="app">
+										<img src="res/assets/icons/Apollo.png" id="icon"></img>
+										<p id="aname">Music</p>
+									</div>
+									<div onclick="hide(appsDrawer);display(terminal)" id="app">
+										<img src="res/assets/icons/Terminal.png" id="icon"></img>
+										<p id="aname">Terminal</p>
+									</div>
+									<div onclick="hide(appsDrawer);display(notepadWindow)" id="app">
+										<img src="res/assets/icons/Notepad.png" id="icon"></img>
+										<p id="aname">Notepad</p>
+									</div>
+									<div onclick="hide(appsDrawer);display(settingsWindow)" id="app">
+										<img src="res/assets/icons/Settings.png" id="icon"></img>
+										<p id="aname">Settings</p>
+									</div>
+							</div>
+						
+							
+							
+						</div>
+						
+				<div id="terminal">
+					<div id="controls">
+								<div id="appName">
+									<i class="fa fa-terminal"></i> 
+									Terminal
+								</div>
+								<div onclick="clrTerminal();hide(terminal)" id="cut">
+								<i class="fa fa-times-circle-o"></i> 
+								</div>
+							</div>
+					<div onclick="$('#terminalInput').focus()" id="terminalOutput">
+					
+					</div>
+					
+					<div class="commander">
+					<span class="terminalGT">&gt;</span>
+						<input placeholder="Type command here" autofocus onfocus="avl_terminal()" id="terminalInput" type="text"/>
+					</div>
+				</div>
+						
+						<div  id="calculatorApp">
+							<div  id="controls">
+								<div id="appName">
+									Calculator
+								</div>
+								<div id="cut" onclick="hide(calculatorApp);calcClear()">
+								<i class="fa fa-times-circle"></i>
+								</div>
+							</div>
+                        <form name="calculator">
+                            <input onfocus="avl_Calc()"  id="input" autocomplete="off" autocorrect="off" type="search" name="ans" value="">
+                            <br>
+                            <div id="operation">
+                                <input type="button" value="+" onClick="document.calculator.ans.value+='+'">
+                                <input type="button" value="-" onClick="document.calculator.ans.value+='-'">
+                                <br>
+                                <input type="button" value="&times;" onClick="document.calculator.ans.value+='*'">
+                                <input type="button" value="&divide;" onClick="document.calculator.ans.value+='/'">
+                            </div>
+                            <div id="numpad">
+                                <input type="button" value="1" onClick="document.calculator.ans.value+='1'">
+                                <input type="button" value="2" onClick="document.calculator.ans.value+='2'">
+                                <input type="button" value="3" onClick="document.calculator.ans.value+='3'">
+                                <br>
+                                <input type="button" value="4" onClick="document.calculator.ans.value+='4'">
+                                <input type="button" value="5" onClick="document.calculator.ans.value+='5'">
+                                <input type="button" value="6" onClick="document.calculator.ans.value+='6'">
+                                <br>
+                                <input type="button" value="7" onClick="document.calculator.ans.value+='7'">
+                                <input type="button" value="8" onClick="document.calculator.ans.value+='8'">
+                                <input type="button" value="9" onClick="document.calculator.ans.value+='9'">
+                                <br>
+                                <input type="button" value="." onClick="document.calculator.ans.value+='.'">
+                                <input type="button" value="0" onClick="document.calculator.ans.value+='0'">
+                                <input type="button" value="00" onClick="document.calculator.ans.value+='00'">
+                            </div>
+                            <div id="equal">
+                                <input type="button" value="=" onClick="document.calculator.ans.value=eval(document.calculator.ans.value)">
+                            </div>
+                    </div>
+					
+					<div id="videoPlayer">
+						<div id="controls">
+								<div id="appName">
+									<i class="fa fa-youtube-play"></i> 
+									Video
+								</div>
+								<div onclick="clrVid();hide(videoPlayer)" id="cut">
+								<i class="fa fa-times-circle-o"></i> 
+								</div>
+							</div>
+							<div class="container">
+							<div id="vidController">
+								<div class="vidItems" onclick="getVideo()">Play</div>
+								<div id="vidInfo"></div>
+							</div>
+							<div id="vidCollection">
+								<p style="color:white">Upload and Play</p>
+								<div  onclick="$('#vidUploader').click();" class="button">
+									<i class="fa fa-arrow-up"></i>Upload
+								</div>
+								<h2 style="color:white">Note: .avi and .wmv files are unsupported.</h2>
+								<input type="file" accept="video/*" id="vidUploader" style="display:none" onchange="playVideo(event)"/>
+							</div>
+								<video controls autoplay  id="vidPlayer"></video>
+							</div>
+					</div>
+					
+					
+					<div id="musicPlayer">
+						<div id="controls">
+								<div id="appName">
+									<i class="fa fa-music"></i> 
+									Music
+								</div>
+								<div onclick="clrAud();hide(musicPlayer)" id="cut">
+								<i class="fa fa-times-circle-o"></i> 
+								</div>
+								<div onclick="hide(musicPlayer)" id="cut">
+								<i class="fa fa-minus"></i> 
+								</div>
+								
+							</div>
+							<div class="container">
+							<div id="audController">
+								<div class="audItems" onclick="getAudio()">Play</div>
+								<div id="audInfo"></div>
+							</div>
+							<div id="audCollection">
+								<p style="color:white">Upload and Play</p>
+								<div  onclick="$('#audUploader').click();" class="button">
+									<i class="fa fa-arrow-up"></i>Upload
+								</div>
+								<br>
+								<p style="color:white">or</p>
+								<h3 style="color:white">Import from URL</h3>
+								<input onfocus="avlImport()" class="txtfield" id="musicURL" placeholder="Enter URL" type="text"/>
+								<div  onclick="importURL()" class="button">
+									<i class="fa fa-arrow-up"></i>Import
+								</div>
+								<input type="file" multiple accept="audio/*" id="audUploader" style="display:none" onchange="playAudio(event)"/>
+							</div>
+								<i id="musicIcon" class="fa fa-music"></i>
+								<audio controls autoplay  id="audPlayer"></audio>
+							</div>
+					</div>
+					<div id="clockApp">
+						<div id="controls">
+								<div id="appName">
+									<i class="fa fa-clock"></i> 
+									Clock
+								</div>
+								<div onclick="resetClock();hide(clockApp)" id="cut">
+								<i class="fa fa-times-circle-o"></i> 
+								</div>
+						</div>
+						<div id="tabs">
+							<div onclick="toggle(stopwatch)" class="tab">Stopwatch</div>
+							<div onclick="toggle(alarm)" style="width:34%" class="tab">Alarm</div>
+							<div onclick="toggle(timer)" class="tab">Timer</div>
+						</div>
+						<div id="panels">
+							<div id="defaultClockPanel">
+								<i style="margin-top:5%;color:orange" class="fa fa-clock-o fa-5x"></i>
+							</div>
+							<div id="stopwatch">
+							Stopwatch
+							</div>
+							<div id="alarm">
+							Alarm
+							</div>
+							<div id="timer">
+							Timer
+							
+							</div>
+						</div>
+					</div>
+					<div id="notepadWindow">
+						<div id="controls">
+								<div id="appName">
+									<i class="fa fa-file"></i> 
+									Notepad
+								</div>
+								<div onclick="hide(notepadWindow)" id="cut">
+								<i class="fa fa-times-circle-o"></i> 
+								</div>
+							</div>
+							<div class="container">
+								<div class="controllers">
+									<div class="noteOpt">
+										<select onchange="file(this.value)" selected="File"  id="fileMenu">
+											<option>File</option>
+											<option>New</option>
+											<option>Open</option>
+											<option>Save</option>
+											<option>Print</option>
+											<option>Exit</option>
+										</select>
+									</div>
+									<div class="noteOpt">
+										<select onchange="changeFont(this.value)" selected="Font" id="fontMenu">
+										
+											<option>Font</option>
+											<option style="font-family:Algerian">Algerian</option>
+											<option style="font-family:Arial">Arial</option>
+											<option style="font-family:Calibri">Calibri</option>
+											<option style="font-family:Century Gothic">Century Gothic</option>
+											<option style="font-family:Comic Sans MS">Comic Sans MS</option>
+											<option style="font-family:Consolas">Consolas</option>
+											<option style="font-family:Courier New">Courier New</option>
+											<option style="font-family:Georgia">Georgia</option>
+											<option style="font-family:Helvetica">Helvetica</option>
+											<option style="font-family:Impact">Impact</option>
+											<option style="font-family:Lucida Console">Lucida Console</option>
+											<option style="font-family:Segoe UI">Segoe ui</option>
+											<option style="font-family:Segoe ui light">Segoe ui light</option>
+											<option style="font-family:Times New Roman">Times New Roman</option>
+											<option style="font-family:Verdana">Verdana</option>
+											<option>Custom</option>
+											
+										</select>
+									</div>
+									<div class="noteOpt">
+									<input onchange="changeFontColor(this.value)"  type="color" id="fontColor"/>
+									</div>
+									<div class="noteOpt">
+									<i onclick="decFont()" style="font-size:1.5vh" class="fa fa-minus modifier"></i>
+									<span ondblclick="setCustomSize()" id="fontSizeOut"></span>
+									<i onclick="incFont()" style="font-size:1.5vh" class="fa fa-plus modifier"></i>
+									</div>
+									<div onclick="saveNote()" class="noteOpt"><i style="font-size:2.5vh" class="fa fa-floppy-o"></i></div>
+								<center>
+			                    <div id="noteinfo">
+									<div id="fileName" class="noteOpt"></div>
+									<div id="fileType" class="noteOpt"></div>
+									<div id="fileSize" class="noteOpt"></div>
+								</div>	
+								</center>
+								</div>
+								
+								<div class="writer">
+									<textarea onfocus="avl_print()" oncontextmenu="return false" id="notepad" ></textarea>
+								</div>
+							</div>
+					</div>
+					<div class="notepadOpen" style="display:none" id="msgBox">
+						<div id="head">
+							<i class="fa fa-file"></i>
+							Open File
+						</div>
+						<div onclick="$('#msgBox').remove()" id="cut">
+						<i class="fa fa-times-circle-o"></i> 
+						</div>
+						<div id="msg">
+						<input accept="text/*" onchange="openFile(event)" type="file" id="fileOpener"></input>
+							<div onclick="$('#fileOpener').click()" class="button">Upload</div>
+						</div>
+					</div>
+					<div id="settingsWindow">
+							<div id="controls">
+								<div id="appName">
+									<i class="fa fa-cog"></i> 
+									Settings
+								</div>
+								<div onclick="resetSettings();hide(settingsWindow)" id="cut">
+								<i class="fa fa-times-circle-o"></i> 
+								</div>
+							</div>
+							<div class="container">
+								
+								<div class="tabholder">
+									<div style="height:30%;"></div>
+									<div onclick="toggle(accountPanel)" class="tabItem">
+									<i class="fa fa-user"></i>
+									Account
+									</div>
+									<div onclick="toggle(bgPanel)" class="tabItem">
+									<i class="fa fa-image"></i>
+									Background
+									</div>
+									<div onclick="toggle(personifyPanel)" class="tabItem">
+									<i class="fa fa-desktop"></i>
+									Animations
+									</div>
+									<div onclick="toggle(aboutPanel)" class="tabItem">
+									<i class="fa fa-info-circle"></i>
+									About
+									</div>
+								</div>
+								
+								
+								
+								<div class="panelholder">
+								<div id="defaultPanel">
+								<i class="fa fa-cog"></i>
+								Settings
+								</div>
+									<div id="accountPanel">
+										<div id="datasetter">
+										
+											<h4><i class="fa fa-user"></i>&nbsp;Name</h4>
+											<div class="dataBlock" onclick="changeName()">
+												<i class="fa fa-user"></i>
+												Change Username
+											</div>
+											<h4><i class="fa fa-key"></i>&nbsp;Password</h4>
+											<div class="dataBlock" onclick="changePass()">
+												<i class="fa fa-key"></i>
+												Change Password
+											</div>
+										</div>
+									</div>
+									<div id="bgPanel">
+									<div class="imagesetter">
+											<h4><i class="fa fa-image"></i>&nbsp;Background</h4>
+											<img id="previewer"></img>
+											<div onclick="$('#bgUploader').click()" class="uploadProfilePic">
+												Upload
+											</div>
+											<input accept="image/*" type="file" id="bgUploader" onchange="setbg(event)"/>
+										
+										</div>
+									</div>
+									<div id="timePanel">
+									</div>
+									<div id="personifyPanel">
+									<h1>Animations</h1>
+									<h3>Themes</h3>
+									<select id="animSelector">
+										<option>No Animations</option>
+										<option>Candy</option>
+										<option>Pegasus</option>
+										<option>Materialize</option>
+									</select>
+									
+									<div class="button" onclick="setAnim($('#animSelector').value)">Set</div>
+									</div>
+									<div id="aboutPanel">
+									<img draggable="false" style="margin-top:1%;" src="res/assets/icon.png" height="100px" width="100px"></img>
+									<div class="infoCard">
+									<h1 style="margin-top:0.5%;">Pegasus OS</h1>
+									<h5>By</h5>
+									<h3>Aniket Chaudhari</h3>
+									<a style="text-decoration:none" href="https://pegasus-os.000webhostapp.com" target="_blank"><div class="button">Visit website</div></a>
+								
+									</div>
+									</div>
+								</div>
+							</div>
+					</div>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+				</div>
+			
+        </center>
+        <div id="taskbar">
+            <div onclick="display(appsDrawer)" id="home">
+                <i class="fa fa-home"></i>
+            </div>
+			
+            <div onclick="findSearch()" id="search">
+                <i class="fa fa-search"></i>
+            </div>
+        </div>
+    </body>
+</html>

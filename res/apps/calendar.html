@@ -1,0 +1,263 @@
+<html oncontextmenu="return false">
+    <head>
+        <script>
+       
+			setInterval("showday()", "3000");
+            function showday() {
+                var time = new Date();
+                var sec = time.getSeconds().toString();
+                var month = time.getMonth();
+                var year = time.getFullYear();
+                var weekday = time.getDay();
+                var yesterday = weekday - 1;
+                var nextday = weekday + 1;
+                var date_today = time.getDate();
+                var date_yesterday = date_today - 1;
+                var date_nextday = date_today + 1;
+                var monthval;
+                if (yesterday == -1) {
+                    document.getElementById("yesterday").innerHTML = "Saturday "
+                }
+                if (yesterday == 0) {
+                    document.getElementById("yesterday").innerHTML = "Sunday "
+                }
+                if (yesterday == 1) {
+                    document.getElementById("yesterday").innerHTML = "Monday "
+                }
+                if (yesterday == 2) {
+                    document.getElementById("yesterday").innerHTML = "Tuesday "
+                }
+                if (yesterday == 3) {
+                    document.getElementById("yesterday").innerHTML = "Wednesday "
+                }
+                if (yesterday == 4) {
+                    document.getElementById("yesterday").innerHTML = "Thursday "
+                }
+                if (yesterday == 5) {
+                    document.getElementById("yesterday").innerHTML = "Friday "
+                }
+                if (nextday == 1) {
+                    document.getElementById("next-day").innerHTML = "Monday "
+                }
+                if (nextday == 2) {
+                    document.getElementById("next-day").innerHTML = "Tuesday "
+                }
+                if (nextday == 3) {
+                    document.getElementById("next-day").innerHTML = "Wednesday "
+                }
+                if (nextday == 4) {
+                    document.getElementById("next-day").innerHTML = "Thursday "
+                }
+                if (nextday == 5) {
+                    document.getElementById("next-day").innerHTML = "Friday "
+                }
+                if (nextday == 6) {
+                    document.getElementById("next-day").innerHTML = "Saturday "
+                }
+                if (nextday == 7) {
+                    document.getElementById("next-day").innerHTML = "Sunday "
+                }
+                if (sec % 2 == 0) {
+                    if (weekday == 0) {
+                        document.getElementById("today").innerHTML = "Sunday <b>" + date_today + "</b>"
+                    }
+                    if (weekday == 1) {
+                        document.getElementById("today").innerHTML = "Monday <b>" + date_today + "</b>"
+                    }
+                    if (weekday == 2) {
+                        document.getElementById("today").innerHTML = "Tuesday <b>" + date_today + "</b>"
+                    }
+                    if (weekday == 3) {
+                        document.getElementById("today").innerHTML = "Wednesday <b>" + date_today + "</b>"
+                    }
+                    if (weekday == 4) {
+                        document.getElementById("today").innerHTML = "Thursday <b>" + date_today + "</b>"
+                    }
+                    if (weekday == 5) {
+                        document.getElementById("today").innerHTML = "Friday <b>" + date_today + "</b>"
+                    }
+                    if (weekday == 6) {
+                        document.getElementById("today").innerHTML = "Saturday <b>" + date_today + "</b>"
+                    }
+                } else {
+                    if (month == 0) {
+                        document.getElementById("today").innerHTML = "January " + year
+                    }
+                    if (month == 1) {
+                        document.getElementById("today").innerHTML = "February " + year
+                    }
+                    if (month == 2) {
+                        document.getElementById("today").innerHTML = "March " + year
+                    }
+                    if (month == 3) {
+                        document.getElementById("today").innerHTML = "April " + year
+                    }
+                    if (month == 4) {
+                        document.getElementById("today").innerHTML = "May " + year
+                    }
+                    if (month == 5) {
+                        document.getElementById("today").innerHTML = "June " + year
+                    }
+                    if (month == 6) {
+                        document.getElementById("today").innerHTML = "July " + year
+                    }
+                    if (month == 7) {
+                        document.getElementById("today").innerHTML = "August " + year
+                    }
+                    if (month == 8) {
+                        document.getElementById("today").innerHTML = "September " + year
+                    }
+                    if (month == 9) {
+                        document.getElementById("today").innerHTML = "October " + year
+                    }
+                    if (month == 10) {
+                        document.getElementById("today").innerHTML = "November " + year
+                    }
+                    if (month == 11) {
+                        document.getElementById("today").innerHTML = "December " + year
+                    }
+                }
+            }
+            setInterval('showtime()', "1000");
+            function showtime() {
+                var time = new Date();
+                var hour = time.getHours();
+                var min = time.getMinutes().toString();
+                var sec = time.getSeconds().toString();
+                var today = time.getDate();
+                if (hour > 12) {
+                    hour = hour - 12;
+                    var distime = "<b>" + hour + "</b>" + ":" + min + ":" + sec;
+                    document.getElementById("time").innerHTML = distime;
+                } 
+				if(sec.length==1){
+				sec = "0"+sec.toString();
+				}
+				if(min.length==1){
+				min = "0" + min;
+				}else {
+                    var distime = "<b>" + hour + "</b>" + ":" + min + ":" + sec;
+                    document.getElementById("time").innerHTML = distime;
+                }
+            }
+        </script>
+        <style>
+		body{
+		background:white;
+		}
+            div.calendar-top {
+                height: 10vh;
+                width: 100%;
+                position: fixed;
+                background: #3F51B5;
+                top: 0;
+                left: 0;
+                right: 0;
+                font-size: 5vh;
+                font-family: segoe ui light;
+                color: white;
+                text-align: center;
+                box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22)!important;
+            }
+
+            span.back {
+                height: 10vh;
+                width: 80px;
+                font-size: 5vh;
+                color: orange;
+                padding-left: 20px;
+                float: left;
+                cursor: pointer;
+                -webkit-transition: background 0.10s;
+            }
+
+            span.back:hover {
+                background: white;
+            }
+
+            div.time {
+                height: 18vh;
+                width: 85%;
+                color: #3F51B5;
+                font-family: segoe ui light;
+                font-size: 10vh;
+                border-radius: 5px;
+                background: white;
+                box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22)!important;
+                margin-top: 5vh;
+                position: relative;
+                animation-name: time;
+                animation-duration: 0.45s;
+                animation-iteration-count: 1;
+            }
+
+            div.today {
+                height: 18vh;
+                width: 85%;
+                border-radius: 5px;
+                background: #3F51B5;
+                box-shadow: inset 0 12px 12px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22)!important;
+                color: white;
+                font-family: segoe ui light;
+                font-size: 10vh;
+            }
+
+            div.date-bar {
+                animation-name: date-animation;
+                animation-duration: 0.45s;
+                animation-iteration-count: 1;
+            }
+
+            div.yesterday {
+                height: 15vh;
+                width: 70%;
+                background: white;
+                box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22)!important;
+                color: #3F51B5;
+                font-family: segoe ui light;
+                margin-top: 4vh;
+                font-size: 10vh;
+            }
+
+            div.next-day {
+                height: 15vh;
+                width: 70%;
+                background: white;
+                box-shadow: 0 12px 12px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22)!important;
+                important!; color: #3F51B5;
+                font-family: segoe ui light;
+                font-size: 10vh;
+            }
+
+            @keyframes time {
+                0% {
+                    margin-top: -15vh;
+                }
+
+                100% {
+                    margin-top: 5vh;
+                }
+            }
+
+            @keyframes date-animation {
+                0% {
+                    margin-top: -100%;
+                }
+
+                100% {
+                    margin: 0%;
+                }
+            }
+        </style>
+    </head>
+    <div id="calenderapp">
+        <center>
+            <div id="time" class="time"></div>
+            <div class="date-bar">
+                <div id="yesterday" class="yesterday"></div>
+                <div id="today" onload="showday()" class="today"></div>
+                <div id="next-day" class="next-day"></div>
+            </div>
+        </center>
+    </div>
+</html>

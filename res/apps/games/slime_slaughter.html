@@ -1,0 +1,1186 @@
+
+<style class="cp-pen-styles">body {
+  color: #222;
+  background: #ededed;
+  font-family: Segoe ui light;
+  font-size: 14px;
+  line-height: 1.3;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #FF2948;
+  font-weight: 700;
+}
+#wrapper {
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 500px;
+  /*background: #f5f5f5;
+  box-shadow: 0px 0px 5px #888888;*/
+}
+
+canvas {
+  border: 1px solid silver;
+  background: white;
+  cursor:default;
+}
+
+.method {
+  color: grey;
+}</style>
+</head>
+<body>
+<h2>Slimes slaughter</h2>
+<canvas id="canvas"></canvas>
+<script>
+
+	function bgmusicplay(){
+var bgmusic = new Audio("games_res/slime_bg.mp3");
+	bgmusic.play()
+	}
+	bgmusicplay();
+	setInterval(bgmusicplay,24000);
+document.body.addEventListener("keydown", function(e) {
+  keys[e.keyCode] = true;
+});
+document.body.addEventListener("keyup", function(e) {
+  keys[e.keyCode] = false;
+});
+keys = [];
+
+// Canvas
+
+canvas = document.getElementById("canvas");
+var ctx = canvas.getContext('2d');
+W = canvas.width = 544;
+H = canvas.height = 416;
+ctx.mozImageSmoothingEnabled = false;
+ctx.msImageSmoothingEnabled = false;
+ctx.imageSmoothingEnabled = false;
+// Utils
+
+var utils = {
+  norm: function(value, min, max) {
+    return (value - min) / (max - min);
+  },
+
+  lerp: function(norm, min, max) {
+    return (max - min) * norm + min;
+  },
+
+  vraifaux: function() {
+    var reponse = utils.randomInt(0, 10);
+    if (reponse > 8) {
+      reponse = true;
+    } else {
+      reponse = false;
+    }
+    return reponse;
+
+  },
+
+  map: function(value, sourceMin, sourceMax, destMin, destMax) {
+    return utils.lerp(utils.norm(value, sourceMin, sourceMax), destMin, destMax);
+  },
+
+  clamp: function(value, min, max) {
+    return Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
+  },
+
+  distance: function(p0, p1) {
+    var dx = p1.pos.x - p0.pos.x,
+      dy = p1.pos.y - p0.pos.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  },
+
+  distanceXY: function(x0, y0, x1, y1) {
+    var dx = x1 - x0,
+      dy = y1 - y0;
+    return Math.sqrt(dx * dx + dy * dy);
+  },
+
+  circleCollision: function(c0, c1) {
+    return utils.distance(c0, c1) <= c0.radius + c1.radius;
+  },
+
+  circlePointCollision: function(x, y, circle) {
+    return utils.distanceXY(x, y, circle.x, circle.y) < circle.radius;
+  },
+
+  pointInRect: function(x, y, rect) {
+    return utils.inRange(x, rect.pos.x, rect.pos.x + rect.size.x) &&
+      utils.inRange(y, rect.pos.y, rect.pos.y + rect.size.y);
+  },
+
+  inRange: function(value, min, max) {
+    return value >= Math.min(min, max) && value <= Math.max(min, max);
+  },
+
+  rangeIntersect: function(min0, max0, min1, max1) {
+    return Math.max(min0, max0) >= Math.min(min1, max1) &&
+      Math.min(min0, max0) <= Math.max(min1, max1);
+  },
+
+  rectIntersect: function(r0, r1) {
+    return utils.rangeIntersect(r0.pos.x, r0.pos.x + r0.size.x, r1.pos.x, r1.pos.x + r1.size.x) &&
+      utils.rangeIntersect(r0.pos.y, r0.pos.y + r0.size.y, r1.pos.y, r1.pos.y + r1.size.y);
+  },
+
+  degreesToRads: function(degrees) {
+    return degrees / 180 * Math.PI;
+  },
+
+  radsToDegrees: function(radians) {
+    return radians * 180 / Math.PI;
+  },
+
+  randomRange: function(min, max) {
+    return min + Math.random() * (max - min);
+  },
+
+  randomInt: function(min, max) {
+    return Math.floor(min + Math.random() * (max - min + 1));
+  },
+
+  getmiddle: function(p0, p1) {
+    var x = p0.x,
+      x2 = p1.x;
+    middlex = (x + x2) / 2;
+    var y = p0.y,
+      y2 = p1.y;
+    middley = (y + y2) / 2;
+    pos = [middlex, middley];
+
+    return pos;
+  },
+
+  getAngle: function(p0, p1) {
+    var deltaX = p1.x - p0.x;
+    var deltaY = p1.y - p0.y;
+    var rad = Math.atan2(deltaY, deltaX);
+    return rad;
+  },
+  inpercentW: function(size) {
+    return (size * W) / 100;
+  },
+
+  inpercentH: function(size) {
+    return (size * H) / 100;
+  },
+
+}
+
+// chargement
+var compte = 0;
+
+function loadImage(url) {
+  var img = new Image();
+  img.onload = function() {
+    onLoad();
+  }
+  img.src = url;
+
+  return img;
+
+}
+
+// charger les images 
+
+var IM = {
+  blob: {
+    img: loadImage("games_res/slimes.png"),
+    w: 384,
+    h: 32,
+    lignes: 1,
+    sep: 12
+  },
+  human: {
+    img: loadImage("games_res/player.png"),
+    w: 192,
+    h: 64,
+    lignes: 2,
+    sep: 6
+  },
+  tubes: {
+    img: loadImage("games_res/tunnels.png")
+  },
+  ammo: {
+    img: loadImage("games_res/ammobag.png"),
+    w: 32,
+    h: 32,
+    lignes: 1,
+    sep: 1
+  },
+  soin: {
+    img: loadImage("games_res/healthbag.png"),
+    w: 32,
+    h: 32,
+    lignes: 1,
+    sep: 1
+  },
+  titre: {
+    img: loadImage("games_res/slimestart.jpg"),
+    w: 32,
+    h: 32,
+    lignes: 1,
+    sep: 1
+  },
+
+};
+
+// sons
+
+function sound(src) {
+  this.sound = document.createElement("audio");
+  this.sound.src = src;
+  this.sound.setAttribute("preload", "auto");
+  this.sound.setAttribute("controls", "none");
+  this.sound.style.display = "none";
+  document.body.appendChild(this.sound);
+  this.play = function() {
+    this.sound.play();
+  }
+  this.stop = function() {
+    this.sound.pause();
+  }
+}
+
+sonSaut = new sound();
+sonBrule =new sound();
+sonMort = new sound();
+sonTire = new sound();
+
+var nombreImg = Object.keys(IM).length;
+
+function onLoad() {
+  compte += 1;
+  if (compte === nombreImg) {
+    boucle();
+
+  } else {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'black';
+    ctx.textAlign = "center";
+    ctx.font = "20px Segoe ui light";
+    ctx.fillText("Loading... ", W / 2, H / 2);
+    ctx.font = "12px Segoe ui light";
+    ctx.fillText(compte + " / " + nombreImg, W / 2, H / 2 + 20);
+    ctx.fillRect(0, H - 150, (compte / nombreImg) * 500, 5);
+  }
+}
+
+
+var entite = function(x, y) {
+  this.pos = {
+    x: x,
+    y: y
+  };
+  this.vel = {
+    x: 0,
+    y: -2
+  };
+  this.size = {
+    x: 20,
+    y: 20
+  };
+  this.color = "#1aa5f0";
+  this.can_jump = true;
+  this.speed = 4;
+  this.etat = {
+    parle: false,
+    degat: false,
+    invul: [false, false],
+    immobile: false,
+    mort: false,
+    contacte: false,
+    presse: false,
+  }
+  this.touches = ["gauche", "droite", "aucun"];
+
+  this.vie = 100;
+
+  this.direction = 0;
+
+  this.aleatoire = {
+    etape: 0,
+    valeur: 0,
+  };
+
+  this.rendu = function(parametres) {
+    this.dessiner();
+    this.update(parametres);
+  }
+  this.dessiner = function() {
+
+    if (this.sprite) {
+      this.sprite.dessiner(this);
+      this.sprite.animate();
+      if (this.etat.degat) {
+        this.sprite.clignote(3, this);
+      }
+
+    } else {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(this.pos.x, this.pos.y, this.size.x, this.size.y);
+    }
+
+  }
+  this.update = function(parametres) {
+
+    if (!this.etat.immobile) {
+      this.vel.x += parametres.force.x;
+      this.vel.y += parametres.force.y;
+      this.vel.x *= .85;
+      this.vel.y *= .98;
+      this.pos.x += this.vel.x;
+      this.pos.y += this.vel.y;
+    }
+  }
+
+  this.deplacement = function() {
+
+    if (keys[90] || keys[38]) {
+      this.diriger("saut");
+    }
+    if (keys[68] || keys[39]) {
+      this.diriger("droite");
+    }
+    if (keys[81] || keys[37]) {
+      this.diriger("gauche");
+    }
+
+    if (!keys[81] && !keys[37] && !keys[68] && !keys[39] && !keys[90] && !keys[38]) {
+      this.diriger("aucun");
+    }
+
+  }
+
+  this.diriger = function(sens) {
+    if (sens === "saut") {
+      if (this.can_jump) {
+        this.can_jump = false;
+        sonSaut.play();
+        this.vel.y = -this.speed * 2;
+      }
+    }
+    if (sens === "droite") {
+      if (this.vel.x < this.speed) {
+        this.vel.x++;
+      }
+      this.sprite.changeLine(0);
+      this.sprite.animation = true;
+      this.direction = 0;
+    }
+    if (sens === "gauche") {
+      if (this.vel.x > -this.speed) {
+        this.vel.x--;
+      }
+      this.sprite.changeLine(0);
+      this.sprite.animation = true;
+      this.direction = 1;
+    }
+
+    if (sens === "aucun") {
+
+      if (this.sprite.idle) {
+        this.sprite.changeLine(1);
+
+        this.sprite.animation = true;
+      } else {
+        this.sprite.changeLine(0);
+        this.sprite.reset();
+        this.sprite.animation = false;
+
+      }
+
+    }
+
+  }
+
+  this.perdVie = function(valeur, stock) {
+    if (!this.etat.invul[1]) {
+      if (this.vie - valeur >= 0) {
+        this.vie -= valeur;
+        this.vel.y = -this.speed;
+        this.etat.degat = true;
+        if (this.etat.invul[0]) {
+          this.etat.invul[1] = true;
+        }
+        
+
+      } else {
+        this.vie = 0;
+        
+        this.etat.mort = true;
+      }
+    }
+
+  }
+
+  this.donnerSprite = function(donnee) {
+    this.sprite = new sprite(donnee);
+  }
+
+  this.attaque = function(cible) {
+
+    if (utils.rectIntersect(this, cible)) {
+      cible.perdVie(utils.randomInt(1, 20));
+    }
+  }
+
+  this.directionAleatoire = function() {
+
+    if (this.aleatoire.etape < this.aleatoire.temps) {
+      this.diriger(this.touches[this.aleatoire.choix]);
+      if (this.aleatoire.saut) {
+        this.diriger("saut");
+      }
+
+      this.aleatoire.etape += .5;
+    } else {
+      this.aleatoire.choix = utils.randomInt(0, 3);
+      this.aleatoire.saut = utils.vraifaux();
+
+      this.aleatoire.temps = utils.randomInt(1, 50);
+      this.aleatoire.etape = 0;
+    }
+
+  }
+
+  this.tirer = function(stock, munitions) {
+    var stock = stock;
+    if (keys[32]) {
+      this.etat.presse = true;
+    }
+    if (!keys[32] && this.etat.presse) {
+
+      sonTire.play();
+      projectile = new particle(this.pos.x + this.size.x / 2, this.pos.y + this.size.y / 2, 10, utils.degreesToRads((this.direction + 2) * 180 + utils.randomInt(-5, 5)));
+      projectile.longevite = .02;
+      projectile.color = "#0bceff";
+      stock.push(projectile);
+      if (munitions) {
+        this.munitions -= 1;
+      }
+      this.etat.presse = false;
+
+    }
+  }
+
+}
+
+/*                           
+ _____         _ _           
+|   __|___ ___|_| |_ ___ ___ 
+|__   | . |  _| |  _| -_|_ -|
+|_____|  _|_| |_|_| |___|___|
+      |_|                    
+*/
+
+var sprite = function(donnee) {
+  this.donnee = donnee;
+  this.image = donnee.apparence.img;
+
+  this.w = donnee.apparence.w / donnee.apparence.sep;
+  this.h = donnee.apparence.h / donnee.apparence.lignes;
+
+  this.longueur = donnee.apparence.sep;
+
+  this.etape = 0;
+  this.tickCount = 0;
+  this.ticksPerFrame = .3;
+  this.line = 0;
+  this.selectline = this.h / donnee.apparence.lignes * this.line + 1;
+  this.animation = false;
+
+  idle = null;
+
+  this.opacite = 1;
+
+  this.effet = {
+    phase: 1,
+    etape: 0,
+    temps: 0,
+  };
+
+  this.dessiner = function(entite) {
+
+    ctx.save();
+    ctx.translate(entite.pos.x - this.w / 2 + entite.size.x / 2, entite.pos.y - entite.size.y / 2);
+    if (entite.direction > 0) {
+      ctx.scale(-1, 1);
+      ctx.translate(-this.w, 0);
+    }
+    ctx.globalAlpha = this.opacite;
+    ctx.beginPath();
+    ctx.drawImage(this.image, Math.floor(this.etape) * this.w, this.selectline, this.w, this.h, 0, 0, this.w, this.h);
+    ctx.stroke();
+    ctx.closePath();
+    ctx.restore();
+    ctx.globalAlpha = 1;
+
+  }
+
+  this.animate = function() {
+    if (this.animation) {
+
+      this.etape += this.ticksPerFrame;
+
+      if (this.etape >= this.longueur - 1) {
+        this.etape = 0;
+      }
+
+    }
+
+  }
+  this.changeLine = function(select) {
+    this.line = select;
+    this.selectline = this.h * this.line;
+  }
+  this.reset = function() {
+    this.etape = 0;
+  }
+  this.clignote = function(vitesse, entite) {
+    if (this.effet.etape > vitesse) {
+      this.effet.phase *= -1;
+      this.effet.etape = 0;
+      this.effet.temps += 1;
+    } else {
+      this.effet.etape++;
+    }
+    if (this.effet.temps > 10) {
+      this.effet.phase = 1;
+      this.effet.temps = 0;
+      entite.etat.degat = false;
+      if (entite.etat.invul[0]) {
+        entite.etat.invul[1] = false;
+      }
+    }
+
+    if (this.effet.phase === -1) {
+      this.opacite = 0;
+    } else if (this.effet.phase === 1) {
+      this.opacite = 1;
+    }
+
+  }
+
+}
+
+
+
+function particle(x, y, speed, angle) {
+  this.pos = {
+    x: x,
+    y: y
+  };
+  this.vel = {
+    x: 0,
+    y: -2
+  };
+  this.friction = .99;
+  this.vx = 1;
+  this.vy = 1;
+  this.mort = false;
+  this.alpha = 1;
+  this.longevite = .03;
+  this.gravity = false;
+
+  this.color = "white";
+
+  this.tourne = 0;
+
+  this.getSpeed = function() {
+    return Math.sqrt(this.vel.x * this.vel.x + this.vel.y * this.vel.y);
+  };
+
+  this.setSpeed = function(speed) {
+    var heading = this.getHeading();
+    this.vel.x = Math.cos(heading) * speed;
+    this.vel.y = Math.sin(heading) * speed;
+  };
+
+  this.getHeading = function() {
+    return Math.atan2(this.vel.y, this.vel.x);
+  };
+
+  this.setHeading = function(heading) {
+    var speed = this.getSpeed();
+    this.vel.x = Math.cos(heading) * speed;
+    this.vel.y = Math.sin(heading) * speed;
+
+  };
+
+  this.angleTo = function(p2) {
+    return Math.atan2(p2.pos.y - this.pos.y, p2.pos.x - this.pos.x);
+
+  };
+  this.setHeading(angle);
+  this.setSpeed(speed);
+
+  this.rendu = function() {
+
+    this.draw();
+    this.update();
+
+  }
+
+  this.draw = function() {
+
+    ctx.globalAlpha = this.alpha;
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+
+    ctx.translate(this.pos.x, this.pos.y);
+    ctx.rotate(this.getHeading());
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.rect(-5, -2, 10, 4);
+    ctx.shadowBlur = 10;
+
+    ctx.fill();
+    ctx.restore();
+    ctx.globalAlpha = 1;
+
+  }
+
+  this.update = function(heading) {
+    this.vel.x *= this.friction;
+    this.vel.y *= this.friction;
+    if (this.gravity) {
+      this.vel.y += .1;
+    }
+
+    this.pos.x += this.vel.x;
+    this.pos.y += this.vel.y;
+    this.tourne += .2;
+    if (this.alpha - this.longevite >= 0) {
+      this.alpha -= this.longevite;
+    } else {
+      this.mort = true;
+    }
+
+  };
+
+}
+
+particle.prototype.collision = function(cible) {
+  if (utils.pointInRect(this.pos.x, this.pos.y, cible)) {
+    cible.perdVie(utils.randomInt(5, 100));
+    this.mort = true;
+  }
+};
+
+/*
+ _____                     
+| __  |___ ___ ___ ___ ___ 
+| __ -| .'|  _|  _| -_|_ -|
+|_____|__,|_| |_| |___|___|
+*/
+
+function barre(x, y, taille) {
+
+  this.x = x;
+  this.y = y;
+  this.taille = taille;
+  this.color = "red";
+
+  this.rendu = function(valeur, nom) {
+    ctx.fillStyle = "#111";
+    ctx.fillRect(this.x - this.taille / 2, this.y, this.taille, 20)
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x - this.taille / 2, this.y, valeur * this.taille / 100, 20)
+    ctx.fillStyle = "white";
+    ctx.font = "15px Segoe ui light";
+
+    ctx.fillText(nom + " " + (valeur * this.taille) / 100 + " %", this.x, this.y + 15);
+
+  };
+
+}
+
+// generateur
+
+function generator(x, y, number, color) {
+  this.x = x;
+  this.y = y;
+  this.compte = 0;
+  this.number = number;
+  this.particles = [];
+  this.angle = 0;
+  this.color = color;
+  this.mort = false;
+
+  for (var i = 0; i < this.number; i++) {
+    parti = new particle(this.x, this.y, utils.randomInt(1, 5), utils.randomInt(0, Math.PI * 2));
+    parti.color = this.color;
+    parti.gravity = true;
+    this.particles.push(parti);
+
+  }
+
+}
+
+generator.prototype.rendu = function() {
+
+  for (var i = 0; i < this.particles.length; i++) {
+    p = this.particles[i];
+
+    if (!p.mort) {
+      p.rendu();
+    } else {
+      this.mort = true;
+    }
+
+  }
+
+}
+
+var moteur = function() {
+
+  this.pnj = [];
+  this.departPnj = [];
+
+  this.nombrePnj = 2;
+  this.limitePnj = 10;
+
+  this.particuleStock = [];
+
+  this.depart;
+  this.parametres = {};
+
+  this.menus = ["titre", "mort", "enjeu"];
+
+  this.etat = this.menus[0];
+
+  this.bloby = new entite(W / 2, H - 20);
+
+};
+
+moteur.prototype.ajouterEntite = function(x, y, couleur, tableau) {
+  var ajout = new entite(x, y);
+  ajout.color = couleur;
+  ajout.donnerSprite(this.parametres.sprites.blob);
+  tableau.push(ajout);
+}
+
+moteur.prototype.trouverTuile = function(id) {
+  var possible = [];
+
+  for (var i = 0; i < this.terrain.x; i++) {
+    for (var j = 0; j < this.terrain.y; j++) {
+      test = this.infoTuile(i * this.taille, j * this.taille);
+      if (test.clef === id) {
+        possible.push(test);
+      }
+    }
+  }
+
+  return possible;
+
+};
+
+moteur.prototype.infoTuile = function(x, y) {
+  var NewX = Math.round(x / this.parametres.taille);
+  var NewY = Math.round(y / this.parametres.taille);
+  //console.log(numeroTuile);
+  var tuile = {
+    clef: this.terrain.data[NewY][NewX],
+    x: NewX * this.parametres.taille,
+    y: NewY * this.parametres.taille
+  };
+  return tuile;
+}
+moteur.prototype.dessinerLeMonde = function() {
+  for (var j = 0; j < this.terrain.y; j++) {
+    for (var i = 0; i < this.terrain.x; i++) {
+      var tileId = this.terrain.data[j][i];
+      if (tileId > 0) {
+
+        ctx.fillStyle = this.parametres.tuiles[tileId].color;
+
+        ctx.fillRect(i * this.parametres.taille, j * this.parametres
+          .taille, this.parametres.taille, this.parametres
+          .taille);
+      }
+    }
+  }
+};
+moteur.prototype.collisionMonde = function(entite) {
+  ctx.fillStyle = "red";
+  var transX = entite.pos.x + entite.vel.x;
+  var transY = entite.pos.y + entite.vel.y;
+  var demie = (this.parametres.taille / 2) - 1;
+  var facteur = {
+    x: entite.size.x - this.taille,
+    y: entite.size.y - this.taille,
+  };
+  //   ctx.fillRect(transX + entite.size.x / 2 - 1, transY + entite.size.y / 2 - 1, 2, 2);
+  var tuile = this.infoTuile(entite.pos.x, entite.pos.y);
+
+  if (this.parametres.tuiles[tuile.clef].action) {
+    action(this.parametres.tuiles[tuile.clef].action, entite);
+  }
+
+  // bas 
+  var bas1 = this.infoTuile(entite.pos.x - demie, transY + facteur.y + this.taille / 2);
+  var bas2 = this.infoTuile(entite.pos.x + demie + facteur.x, transY + facteur.y + this.taille / 2);
+  ctx.fillRect(entite.pos.x - demie.x + 1, transY + demie.y, 1, 2);
+  ctx.fillRect(entite.pos.x + demie.x - 1, transY + demie.y, 1, 2);
+  if (bas1 && bas2) {
+    if (this.parametres.tuiles[bas1.clef].collision || this.parametres.tuiles[bas2.clef].collision) {
+      entite.vel.y *= -.5;
+      entite.pos.y = bas1.y - this.taille - facteur.y;
+      entite.pos.y = bas2.y - this.taille - facteur.y;
+      entite.can_jump = true;
+    }
+  }
+  // haut 
+  var haut1 = this.infoTuile(entite.pos.x - demie, transY - this.taille / 2);
+  var haut2 = this.infoTuile(entite.pos.x + demie + facteur.x, transY - this.taille / 2);
+  if (haut1 && haut2) {
+    if (this.parametres.tuiles[haut1.clef].collision || this.parametres.tuiles[haut2.clef].collision) {
+      entite.vel.y *= -.1;
+      entite.pos.y = haut1.y + this.taille;
+      entite.pos.y = haut2.y + this.taille;
+    }
+  }
+  // gauche 
+  var gauche1 = this.infoTuile(transX - this.taille / 2, entite.pos.y - demie);
+  var gauche2 = this.infoTuile(transX - this.taille / 2, entite.pos.y + facteur.y + demie);
+  if (gauche1 && gauche2) {
+    if (this.parametres.tuiles[gauche1.clef].collision || this.parametres.tuiles[gauche2.clef].collision) {
+      entite.vel.x *= -.1;
+      entite.pos.x = gauche1.x + this.taille;
+      entite.pos.x = gauche2.x + this.taille;
+    }
+  }
+  // droite 
+  var droite1 = this.infoTuile(transX + facteur.x + this.taille / 2, entite.pos.y - demie);
+  var droite2 = this.infoTuile(transX + facteur.x + this.taille / 2, entite.pos.y + facteur.y + demie);
+  if (droite1 && droite2) {
+    if (this.parametres.tuiles[droite1.clef].collision || this.parametres.tuiles[droite2.clef].collision) {
+      entite.vel.x *= -.1;
+      entite.pos.x = droite1.x - entite.size.x;
+      entite.pos.x = droite2.x - entite.size.x;
+    }
+  }
+};
+
+moteur.prototype.chargerLeMonde = function(monde) {
+  // stocks
+  this.pnj = [];
+  this.projectiles = [];
+  this.particuleStock = [];
+  // theme son
+  this.score = 0;
+  // terrain 
+  this.parametres = monde;
+  this.taille = this.parametres.taille;
+  this.terrain = {};
+  this.terrain.data = this.parametres.data;
+  this.terrain.x = this.terrain.data[0].length;
+  this.terrain.y = this.terrain.data.length;
+  this.terrain.limites = {
+    x: this.terrain.x * this.parametres.taille,
+    y: this.terrain.y * this.parametres.taille
+  };
+  
+  this.depart = this.trouverTuile(3)[0];
+  
+  this.joueur = new entite(this.depart.x, this.depart.y);
+  this.joueur.donnerSprite(this.parametres.sprites.human);
+  this.joueur.sprite.ticksPerFrame = .2;
+  this.joueur.sprite.idle = true;
+
+  this.joueur.type = "joueur";
+  this.joueur.etat.invul = [true, false];
+  this.joueur.munitions = 50;
+
+  this.barreVie = new barre(W / 2, 20, 100);
+  this.barreVie.color = "#ff0e30";
+  this.barreMunition = new barre(W / 2, 50, 100);
+  this.barreMunition.color = "#fa9411";
+ 
+  this.departPnj = this.trouverTuile(4);
+
+  for (var i = 0; i < this.nombrePnj; i++) {
+    this.ajouterEntite(this.departPnj[utils.randomInt(0, this.departPnj.length - 1)].x, this.departPnj[utils.randomInt(0, this.departPnj.length - 1)].y, "red", this.pnj);
+  }
+
+ 
+  this.ammo = new entite(W / 2, 50);
+  this.ammo.donnerSprite(this.parametres.sprites.ammo);
+  this.ammo.rammassable = {
+    action: true,
+    temps: 0,
+  };
+  
+  this.soin = new entite(W / 2, 300);
+  this.soin.donnerSprite(this.parametres.sprites.soin);
+  this.soin.rammassable = {
+    action: true,
+    temps: 0,
+  };
+
+}
+
+moteur.prototype.rendu = function() {
+  ctx.save();
+   this.dessinerLeMonde();
+
+ 
+  for (var i = 0; i < this.particuleStock.length; i++) {
+    this.particuleStock[i].rendu();
+    if (this.particuleStock[i].mort) {
+      this.particuleStock.splice(i, 1);
+
+    }
+  }
+
+  for (var i = 0; i < this.pnj.length; i++) {
+    this.pnj[i].rendu(this.parametres);
+    this.collisionMonde(this.pnj[i]);
+    this.pnj[i].attaque(this.joueur);
+    this.pnj[i].directionAleatoire();
+    if (this.pnj[i].etat.mort) {
+      this.score += 1;
+      this.particuleStock.push(new generator(this.pnj[i].pos.x, this.pnj[i].pos.y, 10, "green"));
+      this.pnj[i].vie = 100;
+      this.pnj[i].pos = {
+        x: this.departPnj[utils.randomInt(0, this.departPnj.length - 1)].x,
+        y: this.departPnj[utils.randomInt(0, this.departPnj.length - 1)].y,
+      }
+      this.pnj[i].vel = {
+        x: 0,
+        y: 0,
+      }
+      this.pnj[i].etat.mort = false;
+      if (this.pnj.length < this.limitePnj) {
+        this.ajouterEntite(this.departPnj[utils.randomInt(0, this.departPnj.length - 1)].x, this.departPnj[utils.randomInt(0, this.departPnj.length - 1)].y, "red", this.pnj);
+
+      }
+
+    }
+
+  }
+
+
+
+  for (var i = 0; i < this.projectiles.length; i++) {
+    this.projectiles[i].rendu(this.parametres);
+
+    for (a = 0; a < this.pnj.length; a++) {
+      this.projectiles[i].collision(this.pnj[a]);
+    }
+
+    if (this.projectiles[i].mort) {
+      this.projectiles.splice(i, 1);
+    }
+  }
+
+ 
+  this.joueur.rendu(this.parametres);
+  this.joueur.deplacement();
+  this.collisionMonde(this.joueur);
+  if (this.joueur.munitions > 0) {
+    this.joueur.tirer(this.projectiles, true);
+  }
+
+  if (this.joueur.etat.mort) {
+    this.particuleStock.push(new generator(this.joueur.pos.x, this.joueur.pos.y, 10, " green"));
+    this.etat = this.menus[1];
+  }
+  ctx.drawImage(IM.tubes.img, 0, 2);
+ 
+  if (!this.ammo.rammassable.action) {
+    this.ammo.rammassable.temps += .1;
+  }
+
+  if (this.ammo.rammassable.temps >= 100) {
+    this.ammo.rammassable.action = true;
+    this.ammo.rammassable.temps = 0;
+    this.ammo.pos.y = 50;
+    this.ammo.vel.y = 0;
+  }
+
+  if (this.ammo.rammassable.action) {
+    this.collisionMonde(this.ammo);
+    this.ammo.rendu(this.parametres);
+    if (utils.rectIntersect(this.ammo, this.joueur)) {
+      this.joueur.munitions = 50;
+      this.particuleStock.push(new generator(this.joueur.pos.x, this.joueur.pos.y, 20, this.barreMunition.color));
+      this.ammo.rammassable.action = false;
+    }
+  }
+  
+
+  if (!this.soin.rammassable.action) {
+    this.soin.rammassable.temps += .1;
+  }
+
+  if (this.soin.rammassable.temps >= 100) {
+    this.soin.rammassable.action = true;
+    this.soin.rammassable.temps = 0;
+    this.soin.pos.y = 300;
+    this.soin.vel.y = 0;
+  }
+
+  if (this.soin.rammassable.action) {
+    this.collisionMonde(this.soin);
+    this.soin.rendu(this.parametres);
+    if (utils.rectIntersect(this.soin, this.joueur)) {
+      this.joueur.vie = 100;
+      this.particuleStock.push(new generator(this.joueur.pos.x, this.joueur.pos.y, 20, this.barreVie.color));
+      this.soin.rammassable.action = false;
+    }
+  }
+
+  
+
+  ctx.restore();
+  this.barreVie.rendu(this.joueur.vie, "Life");
+  this.barreMunition.rendu(this.joueur.munitions * 2, "ammo");
+}
+
+moteur.prototype.enJeu = function(monde) {
+
+  switch (this.etat) {
+    case "titre":
+      if (keys[32]) {
+        this.chargerLeMonde(monde, this.niveauActuel);
+        this.etat = this.menus[2];
+      } else {
+        ctx.drawImage(IM.titre.img, 0, 2);
+      }
+
+      break;
+    case "enjeu":
+
+      this.rendu();
+      break;
+    case "mort":
+      if (keys[82]) {
+        this.etat = this.menus[0];
+
+      } else {
+        ctx.fillStyle = "white";
+        ctx.font = "30px Segoe ui light";
+        ctx.textAlign = "center";
+        ctx.fillText("Alas...you died", W / 2, 100);
+        ctx.font = "25px Segoe ui light";
+        ctx.fillText("You scored " + this.score, W / 2, 140);
+        ctx.font = "20px Segoe ui light";
+        ctx.fillText("Press 'R' to try again", W / 2, H - 40);
+        ctx.font = "25px Segoe ui light";
+        ctx.fillText("Thanks for using Pegasus OS", W / 2, H - 80);
+
+      }
+      break;
+
+    default:
+
+      console.log("Aucun menu reconnu");
+  }
+
+}
+
+function action(nom, entite) {
+
+  switch (nom) {
+    case "brule":
+      entite.perdVie(30, this.particuleStock);
+      break;
+    default:
+      console.log("Aucune action reconnue");
+  }
+
+}
+
+var monde = {
+  tuiles: [
+  
+    {
+      collision: false,
+      color: "transparent"
+    },
+    //1 terre
+    {
+      collision: true,
+      color: "#141212"
+    },
+ 
+    {
+      collision: false,
+      color: "red",
+      action: "brule"
+    },
+ 
+    {
+      collision: false,
+      color: "transparent"
+    },
+   
+    {
+      collision: false,
+      color: "transparent"
+    },
+  ],
+
+  sprites: {
+    blob: {
+      apparence: IM.blob,
+      animation: true
+    },
+    human: {
+      apparence: IM.human,
+      animation: true
+    },
+    ammo: {
+      apparence: IM.ammo,
+      animation: true
+    },
+    soin: {
+      apparence: IM.soin,
+      animation: true
+    },
+  },
+
+  taille: 32,
+  data: [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ],
+  force: {
+    x: 0,
+    y: .3
+  },
+};
+
+var collision = new moteur();
+
+function boucle() {
+  ctx.fillStyle = "#1e282f";
+  ctx.fillRect(0, 0, W, H);
+
+  collision.enJeu(monde);
+
+  requestAnimationFrame(boucle);
+}
+</script>
