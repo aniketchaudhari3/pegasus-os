@@ -1,5 +1,5 @@
 ## Welcome to Pegasus OS
-A web based operating system written in JavaScript!
+A web based operating system simulator written in JavaScript!
 ### ![Image](http://pegasus-os.comxa.com/pegasus_demo/res/assets/favicon.png)
 ### Inspired from
 - _Android_
