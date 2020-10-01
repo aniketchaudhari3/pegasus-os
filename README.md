@@ -3,4 +3,4 @@ An awesome operating system simulator written in pure JavaScript.
 
 Try demo on [website](https://pegasus-os.netlify.app)
 
-[Contact](https://instagra.am/aniket.chaudhari3)
+[Contact](https://instagram.com/aniket_c333)
