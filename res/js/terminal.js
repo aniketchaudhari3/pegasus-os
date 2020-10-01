@@ -2,6 +2,7 @@
 terminal.js
 Pegasus v2.0
 Aniket Chaudhari
+Desc: Terminal JS code
 */
 
 function out(msg){
