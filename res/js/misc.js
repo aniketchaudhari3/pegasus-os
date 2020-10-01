@@ -2,6 +2,7 @@
 Misc.js
 Pegasus v2.0 
 Aniket Chaudhari
+Desc: A JS file for miscellanous utility functions
 */
 function avl_pass(){
 	$('#osPass').addEventListener('keypress',function(e){
