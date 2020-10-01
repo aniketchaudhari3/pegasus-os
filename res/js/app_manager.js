@@ -3,6 +3,7 @@ App_Manager.js
 Pegasus v2.0 
 Aniket Chaudhari
 
+Application container creation code
 
 Application launcher function 
 /*
