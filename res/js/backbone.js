@@ -2,6 +2,7 @@
 Backbone.js
 Pegasus v2.0 
 Aniket Chaudhari
+main file, runs on initialization
 */
 window.onload = initOS;
 window.onblur = function(){
