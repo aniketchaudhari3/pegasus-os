@@ -77,3 +77,5 @@ function msg(txt){
 	
 	display(container);
 }
+
+// app_manager.js ends here
