@@ -7,3 +7,5 @@ You can try demo on [website](https://pegasus-os.netlify.app)
 
 
 [Personal Website](https://aniketchaudhari.com)
+
+:)
