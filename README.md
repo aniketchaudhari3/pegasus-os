@@ -7,3 +7,6 @@ You can try demo on [website](https://pegasus-os.netlify.app)
 
 
 [Personal Website](https://aniketchaudhari.com)
+
+
+[Watch on YouTube](https://youtu.be/5xMvzAlqb28)
